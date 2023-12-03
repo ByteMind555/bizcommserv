@@ -2,8 +2,8 @@
   "basePath": "/v1/",
   "swagger": "2.0",
   "info": {
-    "description": "This is an Air New Zealand - Technology Platform eXperience(TPX) offering. The platform exposes REST service for communication, supporting channels like eMail, SMS and Chats(user to user & user to group) in the future.",
-    "title": "bizcommserv",
+    "description": "This is an Air New Zealand - Technology Platform eXperience(TPX) offering. The platform exposes REST services for communication, supporting channels like Mail, SMS and Chats(user to user & user to group) in the future. Currently it supports only Mail capabilities.",
+    "title": "bizcommserv (Business Communication Service)",
     "version": "V1.0",
     "x-publicDocsPath": "communication-capabilities",
     "x-serviceName": "bizcommserv"
@@ -17,12 +17,6 @@
   ],
   "schemes": [
     "https"
-  ],
-  "tags": [
-    {
-      "name": "Mail Service",
-      "description": "Service for posting and fetching of Mails of a user."
-    }
   ],
   "paths": {
     "/mails/send": {
@@ -133,7 +127,7 @@
       "post": {
         "description": "The endpoint is invoked for saving an Mail in draft Mode.",
         "operationId": "email.draft",
-        "summary": "Send Mail to recipients.",
+        "summary": "Save Mails in draft mode.",
         "consumes": [
           "application/json"
         ],
@@ -228,7 +222,7 @@
     },
     "/mails/": {
       "get": {
-        "summary": "Fetch a list of Mails belonging to the user. The same API endpoint is used for fetching the Mails RECEIVED, SENT, DRAFT and OUTBOX.",
+        "summary": "Fetch a list of Mails belonging to the user. There is few filter criteria added to make this API support search capabilities",
         "operationId": "email.get",
         "produces": [
           "application/json"
@@ -357,7 +351,7 @@
     },
     "/mails/{id}": {
       "put": {
-        "summary": "Fetch a list of Mails belonging to the user. The same API endpoint is used for fetching the Mails RECEIVED, SENT, DRAFT and OUTBOX.",
+        "summary": "Update the contents of a mail saved in draft.",
         "operationId": "email.put",
         "produces": [
           "application/json"
