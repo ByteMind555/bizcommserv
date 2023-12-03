@@ -28,7 +28,7 @@ import java.util.Objects;
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2023-12-03T09:16:47.346Z")
 public class MessageSearchResponse {
   @JsonProperty("messages")
-  private List<MessageResponse> messages = null;
+  private List<MessageResponse> messages = new ArrayList<>();
 
   public MessageSearchResponse messages(List<MessageResponse> messages) {
     this.messages = messages;

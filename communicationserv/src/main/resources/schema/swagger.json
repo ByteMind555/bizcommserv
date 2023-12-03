@@ -1,5 +1,5 @@
 {
-  "basePath": "/v1/comms/",
+  "basePath": "/v1/",
   "swagger": "2.0",
   "info": {
     "description": "This is an Air New Zealand - Technology Platform eXperience(TPX) offering. The platform exposes REST service for communication, supporting channels like eMail, SMS and Chats(user to user & user to group) in the future.",
@@ -25,7 +25,7 @@
     }
   ],
   "paths": {
-    "/email/messages": {
+    "/mails/send": {
       "post": {
         "description": "The endpoint is invoked for sending an eMail to one or more users.",
         "operationId": "email.post",
@@ -62,10 +62,10 @@
           {
             "in": "body",
             "name": "body",
-            "description": "Details for creating Liquidation Damages claim.",
+            "description": "Payload to send a email message to recipients.",
             "required": true,
             "schema": {
-              "$ref": "message_request.json"
+              "$ref": "#/definitions/message_request"
             }
           }
         ],
@@ -78,52 +78,151 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful response. Returns existing Liquidated Damage if Liquidated Damage claim is already under process for same account number / case combination.",
+            "description": "Successful response. Returns existing mail payload sent to the recipients .",
             "schema": {
-              "$ref": "message_response.json"
+              "$ref": "#/definitions/message_response"
             }
           },
           "201": {
             "description": "Successful response. New Liquidated Damage created.",
             "schema": {
-              "$ref": "message_response.json"
+              "$ref": "#/definitions/message_response"
             }
           },
           "400": {
             "description": "Bad Request.",
             "schema": {
-              "$ref": "commons/error_detail.json"
+              "$ref": "#/definitions/error_detail"
             }
           },
           "403": {
             "description": "Authorization failed due to insufficient permissions.",
             "schema": {
-              "$ref": "commons/error_detail.json"
+              "$ref": "#/definitions/error_detail"
             }
           },
           "422": {
             "description": "The requested action could not be performed, semantically incorrect, or failed business validation.",
             "schema": {
-              "$ref": "commons/error_detail.json"
+              "$ref": "#/definitions/error_detail"
             }
           },
           "500": {
             "description": "An internal server error has occurred.",
             "schema": {
-              "$ref": "commons/error_detail.json"
+              "$ref": "#/definitions/error_detail"
             }
           },
           "default": {
             "description": "Error response.",
             "schema": {
-              "$ref": "commons/error_detail.json"
+              "$ref": "#/definitions/error_detail"
             }
           }
         }
-      },
+      }
+    },
+    "/mails/drafts": {
+      "post": {
+        "description": "The endpoint is invoked for saving an eMail in draft Mode.",
+        "operationId": "email.draft",
+        "summary": "Send eMail to recipients.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "x-serviceName": "bizcommserv",
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "minLength": 1,
+            "description": "An identity object that uniquely authorises the user in the platform."
+          },
+          {
+            "name": "Correlation_Id",
+            "in": "header",
+            "type": "string",
+            "minLength": 1,
+            "description": "An identity object that identifies Applications. This is used to convey application identity metadata."
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Payload to save the message as draft.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/message_request"
+            }
+          }
+        ],
+        "x-slo": {
+          "response_time_95th_percentile": 200,
+          "error_rate": 0.001
+        },
+        "tags": [
+          "eMails Service"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response. Returns mail draft sent to the recipients.",
+            "schema": {
+              "$ref": "#/definitions/message_response"
+            }
+          },
+          "201": {
+            "description": "Successful response. New Liquidated Damage created.",
+            "schema": {
+              "$ref": "#/definitions/message_response"
+            }
+          },
+          "400": {
+            "description": "Bad Request.",
+            "schema": {
+              "$ref": "#/definitions/error_detail"
+            }
+          },
+          "403": {
+            "description": "Authorization failed due to insufficient permissions.",
+            "schema": {
+              "$ref": "#/definitions/error_detail"
+            }
+          },
+          "422": {
+            "description": "The requested action could not be performed, semantically incorrect, or failed business validation.",
+            "schema": {
+              "$ref": "#/definitions/error_detail"
+            }
+          },
+          "500": {
+            "description": "An internal server error has occurred.",
+            "schema": {
+              "$ref": "#/definitions/error_detail"
+            }
+          },
+          "default": {
+            "description": "Error response.",
+            "schema": {
+              "$ref": "#/definitions/error_detail"
+            }
+          }
+        }
+      }
+    },
+    "/mails/": {
       "get": {
         "summary": "Fetch a list of eMails belonging to the user. The same API endpoint is used for fetching the eMails RECEIVED, SENT, DRAFT and OUTBOX.",
-        "operationId": "email.post",
+        "operationId": "email.get",
         "produces": [
           "application/json"
         ],
@@ -209,28 +308,27 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful response. Returns a list of liquidated damage claims meeting the filter criteria.",
+            "description": "Successful response. Returns a list of eMails.",
             "schema": {
-              "description": "List of Liquidated Damage claims meeting the filter criteria.",
-              "$ref": "message_search_response.json"
+              "$ref": "#/definitions/message_search_response"
             }
           },
           "400": {
             "description": "Bad request, some invalid filter criteria passed.",
             "schema": {
-              "$ref": "commons/error_detail.json"
+              "$ref": "#/definitions/error_detail"
             }
           },
           "403": {
             "description": "Authorization failed due to insufficient permissions.",
             "schema": {
-              "$ref": "commons/error_detail.json"
+              "$ref": "#/definitions/error_detail"
             }
           },
           "500": {
             "description": "Internal server error occured.",
             "schema": {
-              "$ref": "commons/error_detail.json"
+              "$ref": "#/definitions/error_detail"
             }
           }
         },
@@ -240,6 +338,221 @@
         "x-slo": {
           "response_time_95th_percentile": 2000,
           "error_rate": 0.001
+        }
+      }
+    }
+  },
+  "definitions": {
+    "recipient_detail": {
+      "type": "object",
+      "title": "recipient_detail",
+      "description": "The list of to,cc,bcc mail Ids that needs to be added",
+      "required": [
+        "recipient_to"
+      ],
+      "properties": {
+        "recipient_to": {
+          "description": "The 'to' list of email Ids to which the email need to be sent.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/email_address"
+          }
+        },
+        "recipient_cc": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/email_address"
+          }
+        },
+        "recipient_bcc": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/email_address"
+          }
+        }
+      }
+    },
+    "message_search_response": {
+      "type": "object",
+      "title": "message_search_response",
+      "description": "eMail message payload",
+      "required": [
+        "message_id"
+      ],
+      "properties": {
+        "messages": {
+          "description": "The list of emails that is returned.",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/definitions/message_response"
+          }
+        }
+      }
+    },
+    "error_detail": {
+      "description": "The Error Payload.",
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "integer"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "content_mime": {
+      "type": "string",
+      "description": "Type of Content",
+      "minLength": 1,
+      "maxLength": 256,
+      "x-enum": [
+        {
+          "value": "TEXT",
+          "description": "The eMail message containing TEXT."
+        },
+        {
+          "value": "PNG",
+          "description": "The eMail message containing PNG."
+        },
+        {
+          "value": "ZIP",
+          "description": "The eMail message containing ZIP."
+        },
+        {
+          "value": "XLS",
+          "description": "The eMail message containing XLS."
+        },
+        {
+          "value": "OTHERS",
+          "description": "The eMail message containing UNKNOWN."
+        }
+      ]
+    },
+    "message_status": {
+      "type": "string",
+      "description": "Status of the message",
+      "minLength": 1,
+      "maxLength": 256,
+      "x-enum": [
+        {
+          "value": "DRAFT",
+          "description": "The eMail message is in saved to be sent for later."
+        },
+        {
+          "value": "SENT",
+          "description": "The eMail message is successfully sent."
+        },
+        {
+          "value": "INBOX",
+          "description": "The eMail message received successfully and is in user mailbox."
+        },
+        {
+          "value": "DRAFT",
+          "description": "The eMail is sent by the user but waiting in outbox due to technical reason."
+        }
+      ]
+    },
+    "message_response": {
+      "type": "object",
+      "title": "message_response",
+      "description": "eMail message payload",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "description": "The GUUID generated for the message.",
+          "type": "string",
+          "minItems": 1,
+          "maxItems": 36
+        },
+        "mail_location": {
+          "description": "If the eMail is in one of the following states. Ex: INBOX, DRAFT, SENT and OUTBOX",
+          "$ref": "#/definitions/message_status"
+        },
+        "content": {
+          "$ref": "#/definitions/message_request"
+        }
+      }
+    },
+    "message_content": {
+      "type": "object",
+      "description": "The body the eMail",
+      "title": "message_content",
+      "properties": {
+        "content_type": {
+          "$ref": "#/definitions/content_mime",
+          "type": "string",
+          "minLength": 1
+        },
+        "content_details": {
+          "type": "object"
+        }
+      }
+    },
+    "message": {
+      "type": "object",
+      "description": "The body the eMail",
+      "title": "message",
+      "properties": {
+        "subject": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/message_content"
+          }
+        }
+      }
+    },
+    "email_address": {
+      "type": "object",
+      "title": "email_address",
+      "description": "eMail identifier and the name of the mail box owner.",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "description": "The eMail Id of the mail box owner.",
+          "type": "string"
+        },
+        "name": {
+          "description": "The name of the mail box owner.",
+          "type": "string"
+        }
+      }
+    },
+    "message_request": {
+      "type": "object",
+      "title": "message_request",
+      "description": "eMail message payload",
+      "required": [
+        "recipient_details"
+      ],
+      "properties": {
+        "message_from": {
+          "description": "The list of email Ids to which the email need to be sent.",
+          "type": "object",
+          "$ref": "#/definitions/email_address"
+        },
+        "message_recipient": {
+          "description": "The list of recipient ids to which the eMail need to be sent.",
+          "$ref": "#/definitions/recipient_detail"
+        },
+        "message_body": {
+          "description": "The list of email Ids to which the email need to be sent.",
+          "type": "object",
+          "$ref": "#/definitions/message"
         }
       }
     }

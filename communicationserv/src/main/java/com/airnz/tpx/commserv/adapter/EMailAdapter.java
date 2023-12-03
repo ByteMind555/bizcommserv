@@ -1,6 +1,6 @@
-package com.airnz.tpx.commserv.adapter.email;
+package com.airnz.tpx.commserv.adapter;
 
-import com.airnz.tpx.commserv.data.EmailBoxRepository;
+import com.airnz.tpx.commserv.data.EmailRepository;
 import com.airnz.tpx.commserv.exception.ProcessingFailureException;
 import com.airnz.tpx.commserv.pojo.EmailMessageDTO;
 import com.airnz.tpx.commserv.pojo.EmailSearchCriteria;
@@ -17,10 +17,10 @@ import static com.airnz.tpx.commserv.common.CommunicationServConstants.MAILBOX_I
 import static com.airnz.tpx.commserv.common.CommunicationServConstants.MAILBOX_SENT;
 
 @Component
-public class EMailboxAdapter {
+public class EMailAdapter {
 
     @Autowired
-    EmailBoxRepository emailBoxRepository;
+    EmailRepository emailBoxRepository;
 
     public MessageResponse pushMessage(MessageRequest msgRequest) throws ProcessingFailureException {
         EmailMessageDTO emailMessageDTO = getEmailMessage(msgRequest);
@@ -42,18 +42,20 @@ public class EMailboxAdapter {
         if (userId != null && !userId.isEmpty() && messages.containsKey(userId)) {
             Map<String, List<EmailMessageDTO>> mailboxMessages = messages.get(userId);
             if (mailboxMessages.containsKey(mailbox)) {
-                List<EmailMessageDTO> messageDTOS = mailboxMessages.get(mailbox);
-                messageSearchResponse.setMessages(getMessages(messageDTOS));
+                prepareSearchResponse(mailboxMessages, mailbox, messageSearchResponse);
             }
         }
         EmailUtil.prettyDisplayMailbox(messageSearchResponse);
         return messageSearchResponse;
     }
 
-    private List<MessageResponse> getMessages(List<EmailMessageDTO> messageDTOS) {
+    private void prepareSearchResponse(Map<String, List<EmailMessageDTO>> mailboxMessages, String mailbox, MessageSearchResponse messageSearchResponse) {
+        List<EmailMessageDTO> messageDTOS = mailboxMessages.get(mailbox);
         List<MessageResponse> messageResponses = new ArrayList<>();
         for (EmailMessageDTO emailMessageDTO : messageDTOS) {
             MessageResponse response = new MessageResponse();
+            response.setId(""+emailMessageDTO.getTimestamp());
+            response.setMailLocation(mailbox);
             MessageRequest messageRequest = new MessageRequest();
             messageRequest.setMessageFrom(getEmailAddress(emailMessageDTO.getMailId()));
             messageRequest.setMessageRecipient(getRecipientDetails(emailMessageDTO));
@@ -62,7 +64,7 @@ public class EMailboxAdapter {
             response.setContent(messageRequest);
             messageResponses.add(response);
         }
-        return messageResponses;
+        messageSearchResponse.setMessages(messageResponses);
     }
 
     private Message getContentDetails(String subject, Map<String, List<String>> content) {

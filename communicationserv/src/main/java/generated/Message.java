@@ -31,7 +31,7 @@ public class Message {
   private String subject = null;
 
   @JsonProperty("contents")
-  private List<MessageContent> contents = null;
+  private List<MessageContent> contents = new ArrayList<>();
 
   public Message subject(String subject) {
     this.subject = subject;

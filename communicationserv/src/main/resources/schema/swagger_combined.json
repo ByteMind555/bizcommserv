@@ -1,5 +1,5 @@
 {
-  "basePath": "/v1/",
+  "basePath": "/v1/comms/",
   "swagger": "2.0",
   "info": {
     "description": "This is an Air New Zealand - Technology Platform eXperience(TPX) offering. The platform exposes REST service for communication, supporting channels like eMail, SMS and Chats(user to user & user to group) in the future.",
@@ -65,7 +65,7 @@
             "description": "Details for creating Liquidation Damages claim.",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/message_request"
+              "$ref": "message_request.json"
             }
           }
         ],
@@ -80,50 +80,50 @@
           "200": {
             "description": "Successful response. Returns existing Liquidated Damage if Liquidated Damage claim is already under process for same account number / case combination.",
             "schema": {
-              "$ref": "#/definitions/message_response"
+              "$ref": "message_response.json"
             }
           },
           "201": {
             "description": "Successful response. New Liquidated Damage created.",
             "schema": {
-              "$ref": "#/definitions/message_response"
+              "$ref": "message_response.json"
             }
           },
           "400": {
             "description": "Bad Request.",
             "schema": {
-              "$ref": "#/definitions/error_detail"
+              "$ref": "commons/error_detail.json"
             }
           },
           "403": {
             "description": "Authorization failed due to insufficient permissions.",
             "schema": {
-              "$ref": "#/definitions/error_detail"
+              "$ref": "commons/error_detail.json"
             }
           },
           "422": {
             "description": "The requested action could not be performed, semantically incorrect, or failed business validation.",
             "schema": {
-              "$ref": "#/definitions/error_detail"
+              "$ref": "commons/error_detail.json"
             }
           },
           "500": {
             "description": "An internal server error has occurred.",
             "schema": {
-              "$ref": "#/definitions/error_detail"
+              "$ref": "commons/error_detail.json"
             }
           },
           "default": {
             "description": "Error response.",
             "schema": {
-              "$ref": "#/definitions/error_detail"
+              "$ref": "commons/error_detail.json"
             }
           }
         }
       },
       "get": {
         "summary": "Fetch a list of eMails belonging to the user. The same API endpoint is used for fetching the eMails RECEIVED, SENT, DRAFT and OUTBOX.",
-        "operationId": "email.get",
+        "operationId": "email.post",
         "produces": [
           "application/json"
         ],
@@ -209,27 +209,28 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful response. Returns a list of eMails.",
+            "description": "Successful response. Returns a list of liquidated damage claims meeting the filter criteria.",
             "schema": {
-              "$ref": "#/definitions/message_search_response"
+              "description": "List of Liquidated Damage claims meeting the filter criteria.",
+              "$ref": "message_search_response.json"
             }
           },
           "400": {
             "description": "Bad request, some invalid filter criteria passed.",
             "schema": {
-              "$ref": "#/definitions/error_detail"
+              "$ref": "commons/error_detail.json"
             }
           },
           "403": {
             "description": "Authorization failed due to insufficient permissions.",
             "schema": {
-              "$ref": "#/definitions/error_detail"
+              "$ref": "commons/error_detail.json"
             }
           },
           "500": {
             "description": "Internal server error occured.",
             "schema": {
-              "$ref": "#/definitions/error_detail"
+              "$ref": "commons/error_detail.json"
             }
           }
         },
@@ -239,174 +240,6 @@
         "x-slo": {
           "response_time_95th_percentile": 2000,
           "error_rate": 0.001
-        }
-      }
-    }
-  },
-  "definitions": {
-    "recipient_detail": {
-      "type": "object",
-      "title": "eMail recipient Ids",
-      "description": "The list of to,cc,bcc mail Ids that needs to be added",
-      "required": [
-        "to_mail_ids",
-        "cc_mail_ids"
-      ],
-      "properties": {
-        "to_mail_ids": {
-          "description": "The 'to' list of email Ids to which the email need to be sent.",
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/email_address"
-          }
-        },
-        "cc_mail_ids": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/email_address"
-          }
-        }
-      }
-    },
-    "message_search_response": {
-      "type": "object",
-      "title": "eMail content for sending to the user",
-      "description": "eMail message payload",
-      "required": [
-        "message_id"
-      ],
-      "properties": {
-        "messages": {
-          "description": "The list of emails that is returned.",
-          "type": "array",
-          "minItems": 1,
-          "maxItems": 100,
-          "items": {
-            "$ref": "#/definitions/message_response"
-          }
-        }
-      }
-    },
-    "error_detail": {
-      "description": "The Error Payload.",
-      "required": [
-        "code",
-        "message"
-      ],
-      "properties": {
-        "code": {
-          "type": "integer"
-        },
-        "message": {
-          "type": "string"
-        }
-      }
-    },
-    "message_status": {
-      "type": "string",
-      "description": "Status of the message",
-      "minLength": 1,
-      "maxLength": 256,
-      "x-enum": [
-        {
-          "value": "DRAFT",
-          "description": "The eMail message is in saved to be sent for later."
-        },
-        {
-          "value": "SENT",
-          "description": "The eMail message is successfully sent."
-        },
-        {
-          "value": "INBOX",
-          "description": "The eMail message received successfully and is in user mailbox."
-        },
-        {
-          "value": "DRAFT",
-          "description": "The eMail is sent by the user but waiting in outbox due to technical reason."
-        }
-      ]
-    },
-    "message_response": {
-      "type": "object",
-      "title": "eMail content for sending to the user",
-      "description": "eMail message payload",
-      "required": [
-        "id"
-      ],
-      "properties": {
-        "id": {
-          "description": "The GUUID generated for the message.",
-          "type": "string",
-          "minItems": 1,
-          "maxItems": 36
-        },
-        "status": {
-          "description": "If the eMail is in one of the following states. Ex: DRAFT, SENT, OUTBOX",
-          "$ref": "#/definitions/message_status"
-        },
-        "content": {
-          "$ref": "#/definitions/message_request"
-        }
-      }
-    },
-    "message_payload": {
-      "type": "object",
-      "description": "The body the eMail",
-      "title": "eMail content for sending to the user",
-      "properties": {
-        "subject": {
-          "type": "string",
-          "minLength": 1
-        },
-        "content_type": {
-          "type": "string",
-          "minLength": 1
-        },
-        "content_details": {
-          "type": "object"
-        }
-      }
-    },
-    "email_address": {
-      "type": "object",
-      "title": "eMail address",
-      "description": "eMail identifier and the name of the mail box owner.",
-      "required": [
-        "id",
-        "name"
-      ],
-      "properties": {
-        "id": {
-          "description": "The eMail Id of the mail box owner.",
-          "type": "string"
-        },
-        "name": {
-          "description": "The name of the mail box owner.",
-          "type": "string"
-        }
-      }
-    },
-    "message_request": {
-      "type": "object",
-      "title": "eMail content for sending to the user",
-      "description": "eMail message payload",
-      "required": [
-        "recipient_details"
-      ],
-      "properties": {
-        "sender_details": {
-          "description": "The list of email Ids to which the email need to be sent.",
-          "type": "object",
-          "$ref": "#/definitions/email_address"
-        },
-        "recipient_details": {
-          "description": "The list of recipient ids to which the eMail need to be sent.",
-          "$ref": "#/definitions/recipient_detail"
-        },
-        "content_details": {
-          "description": "The list of email Ids to which the email need to be sent.",
-          "type": "object",
-          "$ref": "#/definitions/message_payload"
         }
       }
     }

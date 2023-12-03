@@ -27,7 +27,6 @@ public class EmailUtil {
             String key = pair.getKey();
             Map<String, List<EmailMessageDTO>> value = pair.getValue();
             LOG.info("Owner: " + key);
-
             for (Map.Entry<String, List<EmailMessageDTO>> stringListEntry : value.entrySet()) {
                 LOG.info("MailBox:" + stringListEntry.getKey());
                 for(EmailMessageDTO emailMessageDTOS : stringListEntry.getValue()){
@@ -40,10 +39,10 @@ public class EmailUtil {
 
     public static void prettyDisplayMailbox(MessageSearchResponse messageSearchResponse) {
         List<MessageResponse> messages = messageSearchResponse.getMessages();
-        System.out.println("------------------------------------------------------------------------");
+        LOG.info("------------------------------------------------------------------------");
         for(MessageResponse messageResponse : messages) {
-            System.out.println(messageResponse);
+            LOG.info("Payload: "+ messageResponse);
         }
-        System.out.println("------------------------------------------------------------------------");
+        LOG.info("------------------------------------------------------------------------");
     }
 }

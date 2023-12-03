@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class EmailBoxRepository {
+public class EmailRepository {
 
     // <mailId, <status, List<Mails>>>
     private static Map<String, Map<String, List<EmailMessageDTO>>> IN_MEMORY_MAILBOX = new HashMap<>();

@@ -1,6 +1,6 @@
-package com.airnz.tpx.commserv.adapter.email;
+package com.airnz.tpx.commserv.adapter;
 
-import com.airnz.tpx.commserv.data.EmailBoxRepository;
+import com.airnz.tpx.commserv.data.EmailRepository;
 import com.airnz.tpx.commserv.pojo.EmailSearchCriteria;
 import com.airnz.tpx.commserv.testutils.TestUtil;
 import generated.MessageRequest;
@@ -14,12 +14,12 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class EMailboxAdapterTest {
+public class EMailAdapterTest {
 
     @Mock
-    EmailBoxRepository emailBoxRepository;
+    EmailRepository emailBoxRepository;
     @InjectMocks
-    EMailboxAdapter eMailboxAdapter;
+    EMailAdapter EMailAdapter;
 
     @BeforeMethod
     public void setup() {
@@ -32,7 +32,7 @@ public class EMailboxAdapterTest {
                 ("diwakar.david@gmail.com", "testUser1@test.com",
                         "testUser2@test.com", "Test Mail Subject", "TEXT",
                         "Merry Christmas to everybody. Ho Ho Ho");
-        MessageResponse messageResponse = eMailboxAdapter.pushMessage(messageRequest);
+        MessageResponse messageResponse = EMailAdapter.pushMessage(messageRequest);
         Assert.assertNotNull(messageResponse.getId());
         Assert.assertEquals(messageResponse.getContent().getMessageFrom().getId(),
                 "diwakar.david@gmail.com");
@@ -58,7 +58,7 @@ public class EMailboxAdapterTest {
                         "TEXT","Thanks for your wishes buddy :)");
 
 
-        MessageResponse messageResponse1 = eMailboxAdapter.pushMessage(messageRequest1);
+        MessageResponse messageResponse1 = EMailAdapter.pushMessage(messageRequest1);
         Assert.assertNotNull(messageResponse1.getId());
         Assert.assertEquals(messageResponse1.getContent().getMessageFrom().getId(),
                 "diwakar.david@gmail.com");
@@ -67,7 +67,7 @@ public class EMailboxAdapterTest {
         Assert.assertEquals(messageResponse1.getContent().getMessageBody().getContents().get(0).getContentDetails(),
                 "Merry Christmas to everybody. Ho Ho Ho");
 
-        MessageResponse messageResponse2 = eMailboxAdapter.pushMessage(messageRequest2);
+        MessageResponse messageResponse2 = EMailAdapter.pushMessage(messageRequest2);
         Assert.assertNotNull(messageResponse2.getId());
         Assert.assertEquals(messageResponse2.getContent().getMessageFrom().getId(),
                 "testUser1@test.com");
@@ -91,11 +91,11 @@ public class EMailboxAdapterTest {
                         "testUser2@test.com", "Test Mail Subject",
                         "TEXT","Thanks for your wishes buddy :)");
 
-        MessageResponse messageResponse1 = eMailboxAdapter.pushMessage(messageRequest1);
-        MessageResponse messageResponse2 = eMailboxAdapter.pushMessage(messageRequest2);
+        MessageResponse messageResponse1 = EMailAdapter.pushMessage(messageRequest1);
+        MessageResponse messageResponse2 = EMailAdapter.pushMessage(messageRequest2);
         EmailSearchCriteria emailSearchCriteria = new EmailSearchCriteria("token testUser2@test.com",
                 "INBOX", "", "", "","");
-        MessageSearchResponse messages = eMailboxAdapter.getMessages(emailSearchCriteria);
+        MessageSearchResponse messages = EMailAdapter.getMessages(emailSearchCriteria);
         Assert.assertNotNull(messages);
         // Since 'testUser2@test.com' has not sent any mails but a recipient for mails from both
         // diwakar.david@gmail.com and  testUser1@test.com

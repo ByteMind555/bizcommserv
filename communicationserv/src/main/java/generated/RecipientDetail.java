@@ -28,7 +28,7 @@ import java.util.Objects;
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2023-12-03T09:16:47.346Z")
 public class RecipientDetail {
   @JsonProperty("recipient_to")
-  private List<EmailAddress> recipientTo = new ArrayList<EmailAddress>();
+  private List<EmailAddress> recipientTo = new ArrayList<>();
 
   @JsonProperty("recipient_cc")
   private List<EmailAddress> recipientCc = new ArrayList<>();
