@@ -13,8 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.airnz.tpx.commserv.common.CommunicationServConstants.MAILBOX_INBOX;
-import static com.airnz.tpx.commserv.common.CommunicationServConstants.MAILBOX_SENT;
+import static com.airnz.tpx.commserv.common.CommunicationServConstants.*;
 
 @Component
 public class EMailAdapter {
@@ -22,6 +21,13 @@ public class EMailAdapter {
     @Autowired
     EmailRepository emailBoxRepository;
 
+    /**
+     * Sending a Mail
+     *
+     * @param msgRequest
+     * @return
+     * @throws ProcessingFailureException
+     */
     public MessageResponse pushMessage(MessageRequest msgRequest) throws ProcessingFailureException {
         EmailMessageDTO emailMessageDTO = getEmailMessage(msgRequest);
         MessageResponse messageResponse = new MessageResponse();
@@ -33,6 +39,13 @@ public class EMailAdapter {
         return messageResponse;
     }
 
+    /**
+     * Get mail from a mailbox
+     *
+     * @param emailSearchCriteria
+     * @return
+     * @throws ProcessingFailureException
+     */
     public MessageSearchResponse getMessages(EmailSearchCriteria emailSearchCriteria)
             throws ProcessingFailureException {
         MessageSearchResponse messageSearchResponse = new MessageSearchResponse();
@@ -48,6 +61,18 @@ public class EMailAdapter {
         EmailUtil.prettyDisplayMailbox(messageSearchResponse);
         return messageSearchResponse;
     }
+
+    public MessageResponse saveDraft(MessageRequest msgRequest) throws ProcessingFailureException {
+        EmailMessageDTO emailMessageDTO = getEmailMessage(msgRequest);
+        MessageResponse messageResponse = new MessageResponse();
+        if (saveMessageAsDraft(emailMessageDTO)) {
+            messageResponse.setId("" + emailMessageDTO.getTimestamp());
+            messageResponse.mailLocation(MAILBOX_DRAFT);
+            messageResponse.setContent(msgRequest);
+        }
+        return messageResponse;
+    }
+
 
     private void prepareSearchResponse(Map<String, List<EmailMessageDTO>> mailboxMessages, String mailbox, MessageSearchResponse messageSearchResponse) {
         List<EmailMessageDTO> messageDTOS = mailboxMessages.get(mailbox);
@@ -144,22 +169,33 @@ public class EMailAdapter {
         return ids;
     }
 
-    /**
-     * Adapter for publishing Email to the in-memory storage in a HashMap
-     *
-     * @param emailMessageDTO
-     * @return boolean
-     */
+
+    public boolean saveMessageAsDraft(EmailMessageDTO emailMessageDTO) {
+        boolean isSaved = false;
+
+        // Put mail reference in DRAFT of the sender mailBox
+        Map<String, Map<String, List<EmailMessageDTO>>> messages = serviceSenderMailBox(emailMessageDTO,MAILBOX_DRAFT);
+
+        EmailUtil.prettyDisplayMailbox(messages);
+        // Check if the usr has mails already. If so add to the list else create a new entry.
+        return isSaved;
+    }
+        /**
+         * Adapter for publishing Email to the in-memory storage in a HashMap
+         *
+         * @param emailMessageDTO
+         * @return boolean
+         */
     public boolean saveMessage(EmailMessageDTO emailMessageDTO) {
         boolean isSaved = false;
 
         // Combine to, cc and bcc
         List<String> recipientList = getRecipientList(emailMessageDTO);
 
-        // Put mail reference in SENT of the sender
-        Map<String, Map<String, List<EmailMessageDTO>>> messages = serviceSenderMailBox(emailMessageDTO);
+        // Put mail reference in SENT of the sender mailBox
+        Map<String, Map<String, List<EmailMessageDTO>>> messages = serviceSenderMailBox(emailMessageDTO, MAILBOX_SENT);
 
-        // Put mail reference in INBOX of the receiver
+        // Put mail reference in INBOX of the receiver mailBox
         isSaved = serviceReceiverMailBox(messages, emailMessageDTO, recipientList, isSaved);
 
         EmailUtil.prettyDisplayMailbox(messages);
@@ -197,26 +233,28 @@ public class EMailAdapter {
         return isSaved;
     }
 
-    private Map<String, Map<String, List<EmailMessageDTO>>> serviceSenderMailBox(EmailMessageDTO emailMessageDTO) {
+    private Map<String, Map<String, List<EmailMessageDTO>>> serviceSenderMailBox(EmailMessageDTO emailMessageDTO,
+                                                                                 String mailBoxLocation) {
         // Putting it in Sender MailBox
         Map<String, Map<String, List<EmailMessageDTO>>> messages = emailBoxRepository.getMessages();
 
+        // Check if the user has previous messages if yes add to existing else create new
         if (messages.containsKey(emailMessageDTO.getMailId())) {
             Map<String, List<EmailMessageDTO>> mailBox = messages.get(emailMessageDTO.getMailId());
-            if (mailBox.containsKey(MAILBOX_SENT)) {
-                List<EmailMessageDTO> emailDtos = mailBox.get(MAILBOX_SENT);
+            if (mailBox.containsKey(mailBoxLocation)) {
+                List<EmailMessageDTO> emailDtos = mailBox.get(mailBoxLocation);
                 emailDtos.add(emailMessageDTO);
-                mailBox.put(MAILBOX_SENT, emailDtos);
+                mailBox.put(mailBoxLocation, emailDtos);
             } else {
                 List<EmailMessageDTO> emailDtos = new ArrayList<>();
                 emailDtos.add(emailMessageDTO);
-                mailBox.put(MAILBOX_SENT, emailDtos);
+                mailBox.put(mailBoxLocation, emailDtos);
             }
         } else {
             Map<String, List<EmailMessageDTO>> mailBox = new HashMap<>();
             List<EmailMessageDTO> emailDtos = new ArrayList<>();
             emailDtos.add(emailMessageDTO);
-            mailBox.put(MAILBOX_SENT, emailDtos);
+            mailBox.put(mailBoxLocation, emailDtos);
             messages.put(emailMessageDTO.getMailId(), mailBox);
         }
         return messages;

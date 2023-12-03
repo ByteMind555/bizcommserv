@@ -30,10 +30,30 @@ public class CommunicationServController {
     @Qualifier("publishEmailService")
     private AbstractCommunicationService<MessageRequest, MessageResponse> publishEmailService;
 
+    @Autowired
+    @Qualifier("draftEmailService")
+    private AbstractCommunicationService<MessageRequest, MessageResponse> draftEmailService;
+
     @PostMapping("/mails/send")
     public ResponseEntity postEmail(@RequestBody MessageRequest messageRequest) {
         try {
             MessageResponse messageResponse = publishEmailService.doProcess(messageRequest);
+            return ResponseEntity.status(HttpStatusCode.valueOf(201)).body(messageResponse);
+        } catch (RequestValidationException ve) {
+            String msg = "Unexpected exception encountered while send EMail. Request: " +messageRequest;
+            LOG.error(msg, ve);
+            return ResponseEntity.status(HttpStatusCode.valueOf(400)).body(ve);
+        } catch (ProcessingFailureException pe) {
+            String msg = "Unexpected exception encountered while send EMail. Request: " +messageRequest;
+            LOG.error(msg, pe);
+            return ResponseEntity.status(HttpStatusCode.valueOf(500)).body(pe);
+        }
+    }
+
+    @PostMapping("/mails/drafts")
+    public ResponseEntity draftEmail(@RequestBody MessageRequest messageRequest) {
+        try {
+            MessageResponse messageResponse = draftEmailService.doProcess(messageRequest);
             return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(messageResponse);
         } catch (RequestValidationException ve) {
             String msg = "Unexpected exception encountered while send EMail. Request: " +messageRequest;
