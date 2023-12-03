@@ -8,21 +8,44 @@ Welcome aboard Air New Zealand's groundbreaking Technology Platform eXperience (
 Hence we are good to start the test
       
 2. **Sending the Message**
-First Message sent by diwakar.david"gmail.com to testUser1.gmail.com and testUser2@gmail.com
+Step 1:
+First Message sent by diwakar.david@gmail.com to testUser1@gmail.com and testUser2@gmail.com
+
 PostMan:
 ![Send Email](https://github.com/ByteMind555/bizcommserv/blob/main/communicationserv/src/test/java/resource/sendEmail1_Swagger.PNG)
 Logs:
 ![Send Email](https://github.com/ByteMind555/bizcommserv/blob/main/communicationserv/src/test/java/resource/sendEmail1_logs.PNG)
 
-Second Message sent by testUser1.gmail.com to diwakar.david"gmail.com and testUser2@gmail.com
+In the attached Logs you could see 3 Users and their Mail Boxes with 1 message each. 
+
+Since diwakar.david@gmail.com sent the mail will be in the 'SENT' mailbox location
+and testUser1@gmail.com and testUser2@gmail.com will have the mail in the 'INBOX' mailbox location
+
+Step 2:
+Second Message sent by testUser1@gmail.com to diwakar.david@gmail.com and testUser2@gmail.com
+
 PostMan:
 ![Send Email](https://github.com/ByteMind555/bizcommserv/blob/main/communicationserv/src/test/java/resource/sendEmail2_testUser_postman.PNG)
 Logs:
 ![Send Email](https://github.com/ByteMind555/bizcommserv/blob/main/communicationserv/src/test/java/resource/sendEmail2_testUser_logs.PNG)
 
+In the attached Logs you could see 3 Users and their Mail Boxes with 2 messages each. 
+
+Since testUser1@gmail.com sent the mail it will in 'SENT' mailbox location. 
+and testUser1@gmail.com and testUser2@gmail.com will have the mail in the 'INBOX' mailbox location
+Hence:
+
+As per the screenshot above
+diwakar.david@gmail.com will contain 1 message in 'SENT' and 1 message in 'INBOX'
+testUser1@gmail.com will contain 1 message in 'INBOX' and 1 message in 'SENT'
+testUser2@gmail.com since he has not sent any messages he will have 2 messages in his 'INBOX' which is displayed in the screenshot
+
 3. **Get Message from Inbox**
 PostMan: Since diwakar just received one mail there is only 1 mail in his 'INBOX'. 
 ![Send Email](https://github.com/ByteMind555/bizcommserv/blob/main/communicationserv/src/test/java/resource/getEmails_from_mailbox_postman.PNG)
+
+The request has fectched the message from diwakar.david@gmail.com 'INBOX' mailbox
+Since there is just 1 message the respective message can be found  
 
 4. **Save as Draft**
 PostMan:
@@ -30,6 +53,8 @@ PostMan:
 Logs:
 ![Send Email](https://github.com/ByteMind555/bizcommserv/blob/main/communicationserv/src/test/java/resource/saveDraft_Diwakar_log.PNG)
 
+Difference between Draft and Send is the message is stored in the 'DRAFT' mailBox. There is no mail to the recipient. 
+So that is visible the attched logs
 
 ## Assumptions
 1. Forget databases and mailboxes! For our MVP, we're wowing you with in-memory volatile Java collections. It's a demo that's as dynamic as it gets!
@@ -37,7 +62,9 @@ Logs:
    1. **Send Message**
    2. **Next-Level Get Message with Search Magic**
    3. **Save as Draft**
-
+3. Not using Spring for any Authorization or Authentication even though we are using the Authorization header. But the lookups will happen only with the Id the request is made. Hence risk of fetching  other users message is still not a threat for this MVP.
+4. The FT verification was manually done with Postman. The following is the collection used invoking the service
+   https://github.com/ByteMind555/bizcommserv/blob/main/communicationserv/src/test/java/resource/AirNZ_Email_Collection.postman_collection.json
 
 ## Design Considerations
 1. We're thinking big with a 'Contract First' API Design approach.
