@@ -82,7 +82,7 @@ So that is visible the attched logs
 1. Forget databases and mailboxes! For our MVP, we're wowing you with in-memory volatile Java collections. It's a demo that's as dynamic as it gets!
 2. We're bringing three cool functionalities to the stage:
    1. **Send Message**
-   2. **Next-Level Get Message with Search Magic**
+   2. **Get Message with Search capability**
    3. **Save as Draft**
 3. Not using Spring for any Authorization or Authentication even though we are using the Authorization header. But the lookups will happen only with the Id the request is made. Hence risk of fetching  other users message is still not a threat for this MVP.
 4. The FT verification was manually done with Postman. The following is the collection used invoking the service
