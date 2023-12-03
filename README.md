@@ -15,7 +15,10 @@ Welcome aboard Air New Zealand's groundbreaking Technology Platform eXperience (
 3. Copy the swagger.json content, paste it in [Swagger Editor](https://editor.swagger.io/), and witness the magic unfold.
 4. From swagger.json, have conjured up the Java spec file powering the entire show.
 
+![Design](https://github.com/ByteMind555/bizcommserv/blob/main/communicationserv/src/test/java/resource/drawio.png)
 
-
+## Callouts
+1. Was having trouble with few scenarios Gradle setup as I have been from Maven. 
+ 
 
 Get ready to embark on a communication revolution! 💬✨ #BizCommServ
