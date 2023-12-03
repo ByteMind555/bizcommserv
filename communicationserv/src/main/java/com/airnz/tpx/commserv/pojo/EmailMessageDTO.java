@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Holder Object servers as a intermediary between request Object or Dao
+ */
 public class EmailMessageDTO {
 
     private long timestamp;

@@ -3,6 +3,12 @@ package com.airnz.tpx.commserv.service;
 import com.airnz.tpx.commserv.exception.ProcessingFailureException;
 import com.airnz.tpx.commserv.exception.RequestValidationException;
 
+/**
+ * Template pattern for having a sequence of steps which will be common for all different implementation
+ *
+ * @param <REQ>
+ * @param <RESP>
+ */
 public abstract class AbstractCommunicationService<REQ, RESP> {
 
     protected abstract void validateRequest(REQ request) throws RequestValidationException;

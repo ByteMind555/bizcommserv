@@ -1,5 +1,8 @@
 package com.airnz.tpx.commserv.exception;
 
+/**
+ *  Custom exception
+ */
 public class ProcessingFailureException extends RuntimeException {
 
     public ProcessingFailureException(String errMsg) {

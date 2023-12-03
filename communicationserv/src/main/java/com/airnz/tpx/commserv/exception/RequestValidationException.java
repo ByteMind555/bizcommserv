@@ -1,5 +1,8 @@
 package com.airnz.tpx.commserv.exception;
 
+/**
+ *  Custom exception
+ */
 public class RequestValidationException extends RuntimeException {
 
     public RequestValidationException(String errMsg) {

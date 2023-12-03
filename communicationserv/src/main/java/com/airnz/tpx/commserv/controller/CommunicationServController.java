@@ -17,6 +17,9 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ *  Controller
+ */
 @RestController
 public class CommunicationServController {
 
@@ -34,6 +37,11 @@ public class CommunicationServController {
     @Qualifier("draftEmailService")
     private AbstractCommunicationService<MessageRequest, MessageResponse> draftEmailService;
 
+    /**
+     *
+     * @param messageRequest
+     * @return
+     */
     @PostMapping("/mails/send")
     public ResponseEntity postEmail(@RequestBody MessageRequest messageRequest) {
         try {
@@ -50,6 +58,11 @@ public class CommunicationServController {
         }
     }
 
+    /**
+     *
+     * @param messageRequest
+     * @return
+     */
     @PostMapping("/mails/drafts")
     public ResponseEntity draftEmail(@RequestBody MessageRequest messageRequest) {
         try {
@@ -66,6 +79,16 @@ public class CommunicationServController {
         }
     }
 
+    /**
+     *
+     * @param authorization
+     * @param mailbox
+     * @param page
+     * @param pageSize
+     * @param sortOrder
+     * @param totalRequired
+     * @return
+     */
     @GetMapping("/mails/search")
     public ResponseEntity getEmails(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
                                            @RequestHeader(value="mailbox", required = true) String mailbox,

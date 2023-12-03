@@ -161,6 +161,12 @@ public class EMailAdapter {
         return ids;
     }
 
+    /**
+     *
+     * @param msgRequest
+     * @return
+     * @throws ProcessingFailureException
+     */
     public MessageResponse saveDraft(MessageRequest msgRequest) throws ProcessingFailureException {
         EmailMessageDTO emailMessageDTO = getEmailMessage(msgRequest);
         MessageResponse messageResponse = new MessageResponse();

@@ -10,8 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+/**
+ * Draft email service.
+ * Have a separate implementation to make the code follow Single responsibility principle.
+ */
 @Component
-@Qualifier("publishEmailService")
+@Qualifier("draftEmailService")
 public class DraftEmailService extends AbstractCommunicationService<MessageRequest, MessageResponse> {
 
     @Autowired

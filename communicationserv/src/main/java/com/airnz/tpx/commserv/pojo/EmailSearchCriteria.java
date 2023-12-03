@@ -1,5 +1,8 @@
 package com.airnz.tpx.commserv.pojo;
 
+/**
+ * Custom search request pojo
+ */
 public class EmailSearchCriteria {
     private String authorization;
     private String mailbox;

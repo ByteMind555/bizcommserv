@@ -10,6 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+/**
+ * Get email service.
+ * Have a separate implementation to make the code follow Single responsibility principle.
+ */
 @Component
 @Qualifier("fetchEmailService")
 public class FetchEmailService extends AbstractCommunicationService<EmailSearchCriteria, MessageSearchResponse> {
