@@ -15,6 +15,10 @@ import java.util.stream.Stream;
 
 import static com.airnz.tpx.commserv.common.CommunicationServConstants.*;
 
+/**
+ *  Contains most of the business logic here
+ *
+ */
 @Component
 public class EMailAdapter {
 
@@ -61,18 +65,6 @@ public class EMailAdapter {
         EmailUtil.prettyDisplayMailbox(messageSearchResponse);
         return messageSearchResponse;
     }
-
-    public MessageResponse saveDraft(MessageRequest msgRequest) throws ProcessingFailureException {
-        EmailMessageDTO emailMessageDTO = getEmailMessage(msgRequest);
-        MessageResponse messageResponse = new MessageResponse();
-        if (saveMessageAsDraft(emailMessageDTO)) {
-            messageResponse.setId("" + emailMessageDTO.getTimestamp());
-            messageResponse.mailLocation(MAILBOX_DRAFT);
-            messageResponse.setContent(msgRequest);
-        }
-        return messageResponse;
-    }
-
 
     private void prepareSearchResponse(Map<String, List<EmailMessageDTO>> mailboxMessages, String mailbox, MessageSearchResponse messageSearchResponse) {
         List<EmailMessageDTO> messageDTOS = mailboxMessages.get(mailbox);
@@ -169,6 +161,16 @@ public class EMailAdapter {
         return ids;
     }
 
+    public MessageResponse saveDraft(MessageRequest msgRequest) throws ProcessingFailureException {
+        EmailMessageDTO emailMessageDTO = getEmailMessage(msgRequest);
+        MessageResponse messageResponse = new MessageResponse();
+        if (saveMessageAsDraft(emailMessageDTO)) {
+            messageResponse.setId("" + emailMessageDTO.getTimestamp());
+            messageResponse.mailLocation(MAILBOX_DRAFT);
+            messageResponse.setContent(msgRequest);
+        }
+        return messageResponse;
+    }
 
     public boolean saveMessageAsDraft(EmailMessageDTO emailMessageDTO) {
         boolean isSaved = false;

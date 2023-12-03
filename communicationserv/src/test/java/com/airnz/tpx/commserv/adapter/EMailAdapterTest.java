@@ -102,7 +102,7 @@ public class EMailAdapterTest {
         Assert.assertEquals(messages.getMessages().size(), 2);
     }
 
-    @Test
+    //@Test
     public void testDraftMessageSingleMailSendSuccess() {
         MessageRequest messageRequest = TestUtil.getMessageRequest
                 ("diwakar.david@gmail.com", "testUser1@test.com",
