@@ -1,0 +1,15 @@
+{
+  "description": "The Error Payload.",
+  "required": [
+    "code",
+    "message"
+  ],
+  "properties": {
+    "code": {
+      "type": "integer"
+    },
+    "message": {
+      "type": "string"
+    }
+  }
+}

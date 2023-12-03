@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "title": "eMail content for sending to the user",
+  "description": "eMail message payload",
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "description": "The GUUID generated for the message.",
+      "type": "string",
+      "minItems": 1,
+      "maxItems": 36
+    },
+    "status": {
+      "description": "If the eMail is in one of the following states. Ex: DRAFT, SENT, OUTBOX",
+      "$ref": "./x-enum/message_status.json"
+    },
+    "content": {
+      "$ref": "message_request.json"
+    }
+  }
+}

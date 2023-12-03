@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "title": "eMail recipient Ids",
+  "description": "The list of to,cc,bcc mail Ids that needs to be added",
+  "required": [
+    "to_mail_ids",
+    "cc_mail_ids",
+    "bcc_mail_ids"
+  ],
+  "properties": {
+    "to_mail_ids": {
+      "description": "The 'to' list of email Ids to which the email need to be sent.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "$ref": "email_address.json"
+      }
+    },
+    "cc_mail_ids": {
+      "description": "The 'cc' list of email Ids to which the email need to be sent.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "$ref": "email_address.json"
+      }
+    },
+    "bcc_mail_ids": {
+      "description": "The 'bcc' list of email Ids to which the email need to be sent.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "$ref": "email_address.json"
+      }
+    }
+  }
+}

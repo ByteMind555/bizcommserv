@@ -1,0 +1,24 @@
+{
+  "type": "string",
+  "description": "Status of the message",
+  "minLength": 1,
+  "maxLength": 256,
+  "x-enum": [
+    {
+      "value": "DRAFT",
+      "description": "The eMail message is in saved to be sent for later."
+    },
+    {
+      "value": "SENT",
+      "description": "The eMail message is successfully sent."
+    },
+    {
+      "value": "INBOX",
+      "description": "The eMail message received successfully and is in user mailbox."
+    },
+    {
+      "value": "DRAFT",
+      "description": "The eMail is sent by the user but waiting in outbox due to technical reason."
+    }
+  ]
+}

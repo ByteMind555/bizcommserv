@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "title": "eMail content for sending to the user",
+  "description": "eMail message payload",
+  "required": [
+    "message_id"
+  ],
+  "properties": {
+    "messages": {
+      "description": "The list of emails that is returned.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "$ref": "message_response.json"
+      }
+    }
+  }
+}

@@ -1,0 +1,247 @@
+{
+  "basePath": "/v1/comms/",
+  "swagger": "2.0",
+  "info": {
+    "description": "This is an Air New Zealand - Technology Platform eXperience(TPX) offering. The platform exposes REST service for communication, supporting channels like eMail, SMS and Chats(user to user & user to group) in the future.",
+    "title": "bizcommserv",
+    "version": "V1.0",
+    "x-publicDocsPath": "communication-capabilities",
+    "x-serviceName": "bizcommserv"
+  },
+  "host": "localhost.com",
+  "produces": [
+    "application/json"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "schemes": [
+    "https"
+  ],
+  "tags": [
+    {
+      "name": "eMails Service",
+      "description": "Service for posting and fetching of eMails of a user."
+    }
+  ],
+  "paths": {
+    "/email/messages": {
+      "post": {
+        "description": "The endpoint is invoked for sending an eMail to one or more users.",
+        "operationId": "email.post",
+        "summary": "Send eMail to recipients.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "x-serviceName": "bizcommserv",
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "minLength": 1,
+            "description": "An identity object that uniquely authorises the user in the platform."
+          },
+          {
+            "name": "Correlation_Id",
+            "in": "header",
+            "type": "string",
+            "minLength": 1,
+            "description": "An identity object that identifies Applications. This is used to convey application identity metadata."
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Details for creating Liquidation Damages claim.",
+            "required": true,
+            "schema": {
+              "$ref": "message_request.json"
+            }
+          }
+        ],
+        "x-slo": {
+          "response_time_95th_percentile": 200,
+          "error_rate": 0.001
+        },
+        "tags": [
+          "eMails Service"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response. Returns existing Liquidated Damage if Liquidated Damage claim is already under process for same account number / case combination.",
+            "schema": {
+              "$ref": "message_response.json"
+            }
+          },
+          "201": {
+            "description": "Successful response. New Liquidated Damage created.",
+            "schema": {
+              "$ref": "message_response.json"
+            }
+          },
+          "400": {
+            "description": "Bad Request.",
+            "schema": {
+              "$ref": "commons/error_detail.json"
+            }
+          },
+          "403": {
+            "description": "Authorization failed due to insufficient permissions.",
+            "schema": {
+              "$ref": "commons/error_detail.json"
+            }
+          },
+          "422": {
+            "description": "The requested action could not be performed, semantically incorrect, or failed business validation.",
+            "schema": {
+              "$ref": "commons/error_detail.json"
+            }
+          },
+          "500": {
+            "description": "An internal server error has occurred.",
+            "schema": {
+              "$ref": "commons/error_detail.json"
+            }
+          },
+          "default": {
+            "description": "Error response.",
+            "schema": {
+              "$ref": "commons/error_detail.json"
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Fetch a list of eMails belonging to the user. The same API endpoint is used for fetching the eMails RECEIVED, SENT, DRAFT and OUTBOX.",
+        "operationId": "email.post",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "x-serviceName": "bizcommserv",
+        "description": "Fetch list of messages which matches request criteria.",
+        "parameters": [
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "type": "string",
+            "minLength": 1,
+            "description": "An identity object that uniquely authorises the user in the platform.",
+            "required": true
+          },
+          {
+            "name": "Correlation_Id",
+            "in": "header",
+            "type": "string",
+            "minLength": 1,
+            "description": "An identity object that identifies Applications. This is used to convey application identity metadata."
+          },
+          {
+            "in": "query",
+            "name": "mailbox",
+            "description": "The eMail mailbox type for fetching. Legal status are SENT, INBOX, DRAFT, OUTBOX.",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "subject",
+            "description": "The subject used for fetching. ",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "The page index.",
+            "type": "integer",
+            "maximum": 500,
+            "minimum": 1,
+            "default": 1,
+            "required": false
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Maximum number of items in the response.",
+            "type": "integer",
+            "maximum": 50,
+            "minimum": 1,
+            "default": 25,
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "sort_order",
+            "description": "Fields to sort by time in descending order.",
+            "required": false,
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50
+          },
+          {
+            "in": "query",
+            "name": "total_required",
+            "description": "Whether total items and pages are required.",
+            "type": "boolean",
+            "default": false,
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response. Returns a list of liquidated damage claims meeting the filter criteria.",
+            "schema": {
+              "description": "List of Liquidated Damage claims meeting the filter criteria.",
+              "$ref": "message_search_response.json"
+            }
+          },
+          "400": {
+            "description": "Bad request, some invalid filter criteria passed.",
+            "schema": {
+              "$ref": "commons/error_detail.json"
+            }
+          },
+          "403": {
+            "description": "Authorization failed due to insufficient permissions.",
+            "schema": {
+              "$ref": "commons/error_detail.json"
+            }
+          },
+          "500": {
+            "description": "Internal server error occured.",
+            "schema": {
+              "$ref": "commons/error_detail.json"
+            }
+          }
+        },
+        "tags": [
+          "eMails Service"
+        ],
+        "x-slo": {
+          "response_time_95th_percentile": 2000,
+          "error_rate": 0.001
+        }
+      }
+    }
+  }
+}

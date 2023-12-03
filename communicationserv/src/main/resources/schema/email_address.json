@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "title": "eMail address",
+  "description": "eMail identifier and the name of the mail box owner.",
+  "required": [
+    "id",
+    "name"
+  ],
+  "properties": {
+    "id": {
+      "description": "The eMail Id of the mail box owner.",
+      "type": "string"
+    },
+    "name": {
+      "description": "The name of the mail box owner.",
+      "type": "string"
+    }
+  }
+}

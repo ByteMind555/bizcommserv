@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "title": "eMail content for sending to the user",
+  "description": "eMail message payload",
+  "required": [
+    "recipient_details"
+  ],
+  "properties": {
+    "sender_details": {
+      "description": "The list of email Ids to which the email need to be sent.",
+      "type": "object",
+      "$ref": "email_address.json"
+    },
+    "recipient_details": {
+      "description": "The list of recipient ids to which the eMail need to be sent.",
+      "$ref": "recipient_detail.json"
+    },
+    "content_details": {
+      "description": "The list of email Ids to which the email need to be sent.",
+      "type": "object",
+      "$ref": "message_payload.json"
+    },
+    "attachments": {
+      "description": "The list of attachments added to the email.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "$ref": "attachment.json"
+      }
+    },
+    "is_message_read": {
+      "description": "Optional param, will be set to true if the eMail has landed to the user inbox and has not been read. Helps distinguish mails that are read from ones that are not read.",
+      "type": "boolean"
+    }
+  }
+}

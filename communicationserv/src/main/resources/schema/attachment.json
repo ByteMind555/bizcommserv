@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "title": "eMail attachment ",
+  "description": "eMail message payload",
+  "required": [
+    "attachment_type",
+    "attachment_content"
+  ],
+  "properties": {
+    "attachment_type": {
+      "description": "Mime type of the content that is sent.",
+      "type": "string"
+    },
+    "attachment_content": {
+      "description": "Binary of the actual attachment.",
+      "type": "object"
+    }
+  }
+}
