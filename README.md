@@ -1,4 +1,4 @@
-# 🚀 bizcommserv: Elevating Your Communication Experience! 🌐💬
+# 🚀 bizcommserv(Business Communication Service) : Elevating Your Communication Experience! 🌐💬
 
 Welcome aboard Air New Zealand's groundbreaking Technology Platform eXperience (TPX)! Our bizcommserv is your passport to seamless communication, boasting RESTful services for eMail, SMS, and Chats (soon, for both user to user & user to group). 🚀✉️🤝
 
@@ -72,6 +72,12 @@ Logs:
 Difference between Draft and Send is the message is stored in the 'DRAFT' mailBox. There is no mail to the recipient. 
 So that is visible the attched logs
 
+| MailId  | INBOX | SENT| DRAFT |OUTBOX | 
+| ------------- | ------------- | ------------- | ------------- |------------- |
+| diwakar.david@gmail.com  |   |   | 1||
+| testUser1@gmail.com  |  | | | |
+| testUser2@gmail.com  |  | | | |
+
 ## Assumptions
 1. Forget databases and mailboxes! For our MVP, we're wowing you with in-memory volatile Java collections. It's a demo that's as dynamic as it gets!
 2. We're bringing three cool functionalities to the stage:
@@ -81,9 +87,11 @@ So that is visible the attched logs
 3. Not using Spring for any Authorization or Authentication even though we are using the Authorization header. But the lookups will happen only with the Id the request is made. Hence risk of fetching  other users message is still not a threat for this MVP.
 4. The FT verification was manually done with Postman. The following is the collection used invoking the service
    https://github.com/ByteMind555/bizcommserv/blob/main/communicationserv/src/test/java/resource/AirNZ_Email_Collection.postman_collection.json
+5. For the automation of the deployment I am new to AWS and hence have started to understand CodeDeploy [at](https://aws.amazon.com/codedeploy/ )  
+6. Performance test was not carried out for the solution       
 
 ## Design Considerations
-1. We're thinking big with a 'Contract First' API Design approach.
+1. We're thinking big with a 'Contract First' API Design approach. Created the OAS Spec 2.0:
 2. Dive into the swagger specification at [GitHub Swagger Spec](https://github.com/ByteMind555/bizcommserv/blob/main/communicationserv/src/main/resources/schema/swagger.json).
 3. Copy the swagger.json content, paste it in [Swagger Editor](https://editor.swagger.io/), and witness the magic unfold.
 4. From swagger.json, have conjured up the Java spec file powering the entire show.
@@ -93,8 +101,8 @@ So that is visible the attched logs
 ![Design](https://github.com/ByteMind555/bizcommserv/blob/main/communicationserv/src/test/java/resource/drawio.png)
 
 ## Callouts
-1. Was having Java class generation issue with Gradle. Hence switched to Maven as I am more comfortable to get solution delivered, will work to get this convered to Gradle. 
-2. Though the Search API supports pagination,sorting and other features they have not been implemented for the demo.  
+1. Was having OpenAPI codegen issues for the generation of Java Classes with Gradle. Hence switched to Maven, as I am more comfortable to get solution delivered, will work to get this convered to Gradle. 
+2. Though Search API supports pagination, sorting and other features, they are not implemented for the demo.  
+3. 
 
-
-Get ready to embark on a communication revolution! 💬✨ #BizCommServ
+Get ready to embark on a communication revolution! Please reachout to me Diwakar <diwakar.david@gmail.com>
