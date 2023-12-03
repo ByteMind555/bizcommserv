@@ -5,6 +5,9 @@ import generated.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Utility class for creating Mock objcets
+ */
 public class TestUtil {
 
     public static MessageRequest getMessageRequest(String senderEmail, String toEmail,

@@ -1,0 +1,255 @@
+{
+	"info": {
+		"_postman_id": "ca7c9def-4637-487d-a949-72eb3bb7930a",
+		"name": "AirNZ_Email_Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5545375"
+	},
+	"item": [
+		{
+			"name": "01_Mail_From_diwakar",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "diwakar.david@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "mailbox",
+						"value": "INBOX",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"message_from\": {\r\n        \"id\": \"diwakar.david@gmail.com\",\r\n        \"name\": \"diwakar\"\r\n    },\r\n    \"message_recipient\": {\r\n        \"recipient_to\": [\r\n            {\r\n                \"id\": \"testUser2@gmail.com\",\r\n                \"name\": \"testUser2\"\r\n            }\r\n        ],\r\n        \"recipient_cc\": [\r\n            {\r\n                \"id\": \"testUser1@gmail.com\",\r\n                \"name\": \"testUser1\"\r\n            }\r\n        ]\r\n    },\r\n    \"message_body\": {\r\n        \"subject\": \"Test Email\",\r\n        \"contents\": [\r\n            {\r\n                \"content_type\": \"TEXT\",\r\n                \"content_details\": \"This is a test Email. Merry Christmas Team :)\"\r\n            }\r\n        ]\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/mails/send",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"mails",
+						"send"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "04_DRAFT_MAIL_diwakar",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "diwakar.david@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "mailbox",
+						"value": "INBOX",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"message_from\": {\r\n        \"id\": \"diwakar.david@gmail.com\",\r\n        \"name\": \"diwakar\"\r\n    },\r\n    \"message_recipient\": {\r\n        \"recipient_to\": [\r\n            {\r\n                \"id\": \"testUser2@gmail.com\",\r\n                \"name\": \"testUser2\"\r\n            }\r\n        ],\r\n        \"recipient_cc\": [\r\n            {\r\n                \"id\": \"testUser1@gmail.com\",\r\n                \"name\": \"testUser1\"\r\n            }\r\n        ]\r\n    },\r\n    \"message_body\": {\r\n        \"subject\": \"Test Email\",\r\n        \"contents\": [\r\n            {\r\n                \"content_type\": \"TEXT\",\r\n                \"content_details\": \"This is a test Email. Merry Christmas Team. No Let me modify this  :)\"\r\n            }\r\n        ]\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/mails/drafts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"mails",
+						"drafts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "01_Mail_from_testUser1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "diwakar.david@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "mailbox",
+						"value": "INBOX",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"message_from\": {\r\n        \"id\": \"testUser1@gmail.com\",\r\n        \"name\": \"testUser1\"\r\n    },\r\n    \"message_recipient\": {\r\n        \"recipient_to\": [\r\n            {\r\n                \"id\": \"testUser2@gmail.com\",\r\n                \"name\": \"testUser2\"\r\n            }\r\n        ],\r\n        \"recipient_cc\": [\r\n            {\r\n                \"id\": \"diwakar.david@gmail.com\",\r\n                \"name\": \"diwakar\"\r\n            }\r\n        ]\r\n    },\r\n    \"message_body\": {\r\n        \"subject\": \"Test Email\",\r\n        \"contents\": [\r\n            {\r\n                \"content_type\": \"TEXT\",\r\n                \"content_details\": \"Thanks for your wishes Diwakar. Merry Christmas and Happy New Year :)\"\r\n            }\r\n        ]\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/mails/send",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"mails",
+						"send"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "01_GET_Mail_from_testUser2",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "diwakar.david@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "mailbox",
+						"value": "DRAFT",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/mails/search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"mails",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "02_GET_Mail_testUser1_SENT",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "testUser2@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "mailbox",
+						"value": "INBOX",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080//mails/search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"",
+						"mails",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "04_GET_diwakar_DRAFT",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "testUser2@gmail.com",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "mailbox",
+						"value": "INBOX",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080//mails/search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"",
+						"mails",
+						"search"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
