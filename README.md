@@ -20,6 +20,12 @@ In the attached Logs you could see 3 Users and their Mail Boxes with 1 message e
 
 Since diwakar.david@gmail.com sent the mail will be in the 'SENT' mailbox location
 and testUser1@gmail.com and testUser2@gmail.com will have the mail in the 'INBOX' mailbox location
+| MailId  | INBOX | SENT| DRAFT |OUTBOX | 
+| ------------- | ------------- | ------------- | ------------- |
+| diwakar.david@gmail.com  |   |  1 | |
+| testUser1@gmail.com  | 1 | | | 
+| testUser2@gmail.com  | 1 | | | 
+
 
 Step 2:
 Second Message sent by testUser1@gmail.com to diwakar.david@gmail.com and testUser2@gmail.com
@@ -39,6 +45,14 @@ As per the screenshot above
 diwakar.david@gmail.com will contain 1 message in 'SENT' and 1 message in 'INBOX'
 testUser1@gmail.com will contain 1 message in 'INBOX' and 1 message in 'SENT'
 testUser2@gmail.com since he has not sent any messages he will have 2 messages in his 'INBOX' which is displayed in the screenshot
+
+| MailId  | INBOX | SENT| DRAFT |OUTBOX | 
+| ------------- | ------------- | ------------- | ------------- |
+| diwakar.david@gmail.com  |1   |  1 | |
+| testUser1@gmail.com  | 1 | 1| | 
+| testUser2@gmail.com  | 2 | | | 
+
+
 
 3. **Get Message from Inbox**
 PostMan: Since diwakar just received one mail there is only 1 mail in his 'INBOX'. 
