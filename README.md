@@ -88,7 +88,7 @@ So that is visible the attched logs
 4. The FT verification was manually done with Postman. The following is the collection used invoking the service
    https://github.com/ByteMind555/bizcommserv/blob/main/communicationserv/src/test/java/resource/AirNZ_Email_Collection.postman_collection.json
 5. For the automation of the deployment I am new to AWS and hence have started to understand CodeDeploy [at](https://aws.amazon.com/codedeploy/ )  
-6. Performance test was not carried out for the solution       
+       
 
 ## Design Considerations
 1. We're thinking big with a 'Contract First' API Design approach. Created the OAS Spec 2.0:
@@ -101,8 +101,10 @@ So that is visible the attched logs
 ![Design](https://github.com/ByteMind555/bizcommserv/blob/main/communicationserv/src/test/java/resource/drawio.png)
 
 ## Callouts
-1. Was having OpenAPI codegen issues for the generation of Java Classes with Gradle. Hence switched to Maven, as I am more comfortable to get solution delivered, will work to get this convered to Gradle. 
+0. SONARCube, DAST, SAST, findbugs, PMD, CPD were not configured yet. Just porviding a MVP version of the application.  
+1. Facing OpenAPI codegen issues for the generation of Java Classes with Gradle. Hence switched to Maven, as I am more comfortable to get solution delivered, will work to get this convered to Gradle. 
 2. Though Search API supports pagination, sorting and other features, they are not implemented for the demo.  
-3. 
+3. Performance test was not carried out for the solution.
+4. Verification was done locally by running in a local tomcat and Postman for invoking the request.
 
 Get ready to embark on a communication revolution! Please reachout to me Diwakar <diwakar.david@gmail.com>
