@@ -58,7 +58,7 @@
             "in": "header",
             "type": "boolean",
             "minLength": 1,
-            "description": "If its a large file,client can specify shoult the request be processed async."
+            "description": "If its a large file,client can specify shoult the request be processed async.The service will send a http 202 accepted and processes the request in backend"
           },
           {
             "in": "body",
@@ -85,7 +85,7 @@
             }
           },
           "202": {
-            "description": "Successful response. New Liquidated Damage created.",
+            "description": "Returned if the async header is true, For a long running operation. A handle Id is retruned along with the response. This can be used by the client to poll the info.",
             "schema": {
               "$ref": "#/definitions/message_response"
             }
@@ -265,7 +265,7 @@
           {
             "in": "query",
             "name": "subject",
-            "description": "The subject used for fetching. ",
+            "description": "Search by subject of the mail. ",
             "type": "string",
             "required": false
           },
@@ -329,6 +329,12 @@
           },
           "403": {
             "description": "Authorization failed due to insufficient permissions.",
+            "schema": {
+              "$ref": "#/definitions/error_detail"
+            }
+          },
+          "422": {
+            "description": "Bad request, some invalid filter criteria passed.",
             "schema": {
               "$ref": "#/definitions/error_detail"
             }
@@ -409,6 +415,9 @@
               "$ref": "#/definitions/message_response"
             }
           },
+          "204": {
+            "description": "Successful response. No content."
+          },
           "400": {
             "description": "Bad request, some invalid filter criteria passed.",
             "schema": {
@@ -417,6 +426,12 @@
           },
           "403": {
             "description": "Authorization failed due to insufficient permissions.",
+            "schema": {
+              "$ref": "#/definitions/error_detail"
+            }
+          },
+          "422": {
+            "description": "Bad request, some invalid filter criteria passed.",
             "schema": {
               "$ref": "#/definitions/error_detail"
             }
@@ -513,7 +528,16 @@
               "$ref": "#/definitions/message_response"
             }
           },
+          "204": {
+            "description": "Successful response. No content."
+          },
           "400": {
+            "description": "Bad request, some invalid filter criteria passed.",
+            "schema": {
+              "$ref": "#/definitions/error_detail"
+            }
+          },
+          "422": {
             "description": "Bad request, some invalid filter criteria passed.",
             "schema": {
               "$ref": "#/definitions/error_detail"
