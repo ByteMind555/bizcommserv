@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 public class PublishEmailService extends AbstractCommunicationService<MessageRequest, MessageResponse> {
 
     @Autowired
-    private EMailAdapter EMailAdapter;
+    private EMailAdapter mailAdapter;
 
     @Override
     protected void validateRequest(MessageRequest request) throws RequestValidationException {
@@ -33,7 +33,7 @@ public class PublishEmailService extends AbstractCommunicationService<MessageReq
 
     @Override
     protected MessageResponse process(MessageRequest request) throws ProcessingFailureException {
-        return EMailAdapter.pushMessage(request);
+        return mailAdapter.pushMessage(request);
     }
 
     @Override

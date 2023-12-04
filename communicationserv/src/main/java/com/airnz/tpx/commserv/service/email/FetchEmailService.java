@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 public class FetchEmailService extends AbstractCommunicationService<EmailSearchCriteria, MessageSearchResponse> {
 
     @Autowired
-    private EMailAdapter EMailAdapter;
+    private EMailAdapter mailAdapter;
 
     @Override
     protected void validateRequest(EmailSearchCriteria request) throws RequestValidationException {
@@ -33,7 +33,7 @@ public class FetchEmailService extends AbstractCommunicationService<EmailSearchC
 
     @Override
     protected MessageSearchResponse process(EmailSearchCriteria request) throws ProcessingFailureException {
-        return EMailAdapter.getMessages(request);
+        return mailAdapter.getMessages(request);
     }
 
     @Override

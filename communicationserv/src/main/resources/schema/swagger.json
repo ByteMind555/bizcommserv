@@ -272,7 +272,7 @@
           {
             "in": "query",
             "name": "ids",
-            "description": "Fetch by Mail Id. Supportes One of more Ids seperated by comma.",
+            "description": "Fetch by Mail Id. Supports One of more Ids seperated by comma.",
             "type": "string",
             "required": false
           },

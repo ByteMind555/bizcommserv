@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 public class DraftEmailService extends AbstractCommunicationService<MessageRequest, MessageResponse> {
 
     @Autowired
-    private EMailAdapter EMailAdapter;
+    private EMailAdapter mailAdapter;
 
     @Override
     protected void validateRequest(MessageRequest request) throws RequestValidationException {
@@ -33,7 +33,7 @@ public class DraftEmailService extends AbstractCommunicationService<MessageReque
 
     @Override
     protected MessageResponse process(MessageRequest request) throws ProcessingFailureException {
-        return EMailAdapter.saveDraft(request);
+        return mailAdapter.saveDraft(request);
     }
 
     @Override

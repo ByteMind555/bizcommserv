@@ -179,7 +179,7 @@ public class EMailAdapter {
     }
 
     public boolean saveMessageAsDraft(EmailMessageDTO emailMessageDTO) {
-        boolean isSaved = false;
+        boolean isSaved = true;
 
         // Put mail reference in DRAFT of the sender mailBox
         Map<String, Map<String, List<EmailMessageDTO>>> messages = serviceSenderMailBox(emailMessageDTO,MAILBOX_DRAFT);
