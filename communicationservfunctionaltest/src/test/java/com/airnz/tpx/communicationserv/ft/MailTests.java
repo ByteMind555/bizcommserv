@@ -95,7 +95,7 @@ public class MailTests {
 
         assertEquals("DRAFT", response.jsonPath().getString("mail_location"));
         LinkedHashMap linkedHashMap = response.jsonPath().getJsonObject("content");
-        LinkedHashMap contentMap= (LinkedHashMap) linkedHashMap.get("message_from");
+        LinkedHashMap msgFrom= (LinkedHashMap) linkedHashMap.get("message_from");
+        assertEquals("diwakar.david@gmail.com", msgFrom.get("id"));
     }
-
 }
