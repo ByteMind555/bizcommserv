@@ -109,10 +109,11 @@ So that is visible the attched logs
 
 
 ## Callouts
-0. SONARCube, DAST, SAST, findbugs, PMD, CPD were not configured yet. Just porviding a MVP version of the application.  
-1. Facing OpenAPI codegen issues for the generation of Java Classes with Gradle. Hence switched to Maven, as I am more comfortable to get solution delivered, will work to get this convered to Gradle. 
-2. Though Search API supports pagination, sorting and other features, they are not implemented for the demo.  
-3. Performance test was not carried out for the solution.
-4. Verification was done locally by running in a local tomcat and Postman for invoking the request.
+0. SONARCube, DAST & SAST (dynamic and static vulerability threats), findbugs, PMD, CPD were not configured yet. Can setup in Jenkings  - For this going with just a MVP version of the application.  
+1. Facing OpenAPI codegen issues during generation of Java Classes with Gradle. Hence switched to Maven, as I am more comfortable - and get solution delivered for review, will work to get this convered to Gradle parallely. 
+2. Though Search API supports pagination, sorting and other features, they are not implemented for the demo. This implementation 
+3. The REST POST supports 'async' header. This is used to do long running opertaion. Application can take the a boolen value. Not implemented for this demo    
+4. Performance test was not carried out for the solution.
+5. Verification was done locally by running in a local tomcat and Postman for invoking the request.
 
 Get ready to embark on a communication revolution! Please reachout to me Diwakar <diwakar.david@gmail.com>
