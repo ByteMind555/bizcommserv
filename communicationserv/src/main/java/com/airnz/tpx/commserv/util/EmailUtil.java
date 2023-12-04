@@ -1,7 +1,7 @@
 package com.airnz.tpx.commserv.util;
 
-import com.airnz.tpx.commserv.pojo.EmailMessageDTO;
 import com.airnz.tpx.commserv.pojo.EmailSearchCriteria;
+import com.airnz.tpx.commserv.pojo.MailMessageDTO;
 import generated.MessageResponse;
 import generated.MessageSearchResponse;
 import org.slf4j.Logger;
@@ -11,12 +11,22 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Helper Class for Email specific usecases
+ * Helper class for Email service
  */
 public class EmailUtil {
 
     private static Logger LOG = LoggerFactory.getLogger(EmailUtil.class);
 
+    /**
+     *
+     * @param authorization
+     * @param mailbox
+     * @param page
+     * @param pageSize
+     * @param sortOrder
+     * @param totalRequired
+     * @return
+     */
     public static EmailSearchCriteria getFetchCriteria(String authorization, String mailbox,
                                                        String page, String pageSize,
                                                        String sortOrder, String totalRequired) {
@@ -24,15 +34,33 @@ public class EmailUtil {
                 page, pageSize, sortOrder, totalRequired);
     }
 
-    public static void prettyDisplayMailbox(Map<String, Map<String, List<EmailMessageDTO>>> inMemoryMailbox) {
+    /**
+     *
+     * @param emailSearchCriteria
+     * @return
+     */
+    public static String getUserId(EmailSearchCriteria emailSearchCriteria) {
+        String authorization = emailSearchCriteria.getAuthorization();
+        String userId = "";
+        if(authorization !=null && !authorization.isEmpty()) {
+            userId = authorization.split(" ")[1];
+        }
+        return userId;
+    }
+
+    /**
+     *
+     * @param inMemoryMailbox
+     */
+    public static void prettyDisplayMailbox(Map<String, Map<String, List<MailMessageDTO>>> inMemoryMailbox) {
         LOG.info("------------------------------------------------------------------------");
-        for (Map.Entry<String, Map<String, List<EmailMessageDTO>>> pair : inMemoryMailbox.entrySet()) {
+        for (Map.Entry<String, Map<String, List<MailMessageDTO>>> pair : inMemoryMailbox.entrySet()) {
             String key = pair.getKey();
-            Map<String, List<EmailMessageDTO>> value = pair.getValue();
+            Map<String, List<MailMessageDTO>> value = pair.getValue();
             LOG.info("Owner: " + key);
-            for (Map.Entry<String, List<EmailMessageDTO>> stringListEntry : value.entrySet()) {
+            for (Map.Entry<String, List<MailMessageDTO>> stringListEntry : value.entrySet()) {
                 LOG.info("MailBox:" + stringListEntry.getKey());
-                for(EmailMessageDTO emailMessageDTOS : stringListEntry.getValue()){
+                for(MailMessageDTO emailMessageDTOS : stringListEntry.getValue()){
                     LOG.info("Mails:" + emailMessageDTOS);
                 }
             }

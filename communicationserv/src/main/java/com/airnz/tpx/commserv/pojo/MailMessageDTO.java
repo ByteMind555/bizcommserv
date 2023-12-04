@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Holder Object servers as a intermediary between request Object or Dao
+ * Holder Object servers as an intermediary between Request payload or Dao
  */
-public class EmailMessageDTO {
+public class MailMessageDTO {
 
     private long timestamp;
 

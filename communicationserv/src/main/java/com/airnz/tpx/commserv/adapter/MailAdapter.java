@@ -1,13 +1,15 @@
 package com.airnz.tpx.commserv.adapter;
 
-import com.airnz.tpx.commserv.data.EmailRepository;
+
+import com.airnz.tpx.commserv.data.MailRepository;
 import com.airnz.tpx.commserv.exception.ProcessingFailureException;
-import com.airnz.tpx.commserv.pojo.EmailMessageDTO;
 import com.airnz.tpx.commserv.pojo.EmailSearchCriteria;
+import com.airnz.tpx.commserv.pojo.MailMessageDTO;
 import com.airnz.tpx.commserv.util.EmailUtil;
 import generated.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,10 +22,10 @@ import static com.airnz.tpx.commserv.common.CommunicationServConstants.*;
  *
  */
 @Component
-public class EMailAdapter {
+public class MailAdapter {
 
     @Autowired
-    EmailRepository emailBoxRepository;
+    MailRepository mailBoxRepository;
 
     /**
      * Sending a Mail
@@ -33,7 +35,7 @@ public class EMailAdapter {
      * @throws ProcessingFailureException
      */
     public MessageResponse pushMessage(MessageRequest msgRequest) throws ProcessingFailureException {
-        EmailMessageDTO emailMessageDTO = getEmailMessage(msgRequest);
+        MailMessageDTO emailMessageDTO = getMailMessage(msgRequest);
         MessageResponse messageResponse = new MessageResponse();
         if (saveMessage(emailMessageDTO)) {
             messageResponse.setId("" + emailMessageDTO.getTimestamp());
@@ -53,11 +55,11 @@ public class EMailAdapter {
     public MessageSearchResponse getMessages(EmailSearchCriteria emailSearchCriteria)
             throws ProcessingFailureException {
         MessageSearchResponse messageSearchResponse = new MessageSearchResponse();
-        Map<String, Map<String, List<EmailMessageDTO>>> messages = emailBoxRepository.getMessages();
-        String userId = emailSearchCriteria.getAuthorization().split(" ")[1];
+        Map<String, Map<String, List<MailMessageDTO>>> messages = mailBoxRepository.getMessages();
+        String userId = EmailUtil.getUserId(emailSearchCriteria);
         String mailbox = emailSearchCriteria.getMailbox();
         if (userId != null && !userId.isEmpty() && messages.containsKey(userId)) {
-            Map<String, List<EmailMessageDTO>> mailboxMessages = messages.get(userId);
+            Map<String, List<MailMessageDTO>> mailboxMessages = messages.get(userId);
             if (mailboxMessages.containsKey(mailbox)) {
                 prepareSearchResponse(mailboxMessages, mailbox, messageSearchResponse);
             }
@@ -66,10 +68,10 @@ public class EMailAdapter {
         return messageSearchResponse;
     }
 
-    private void prepareSearchResponse(Map<String, List<EmailMessageDTO>> mailboxMessages, String mailbox, MessageSearchResponse messageSearchResponse) {
-        List<EmailMessageDTO> messageDTOS = mailboxMessages.get(mailbox);
+    private void prepareSearchResponse(Map<String, List<MailMessageDTO>> mailboxMessages, String mailbox, MessageSearchResponse messageSearchResponse) {
+        List<MailMessageDTO> messageDTOS = mailboxMessages.get(mailbox);
         List<MessageResponse> messageResponses = new ArrayList<>();
-        for (EmailMessageDTO emailMessageDTO : messageDTOS) {
+        for (MailMessageDTO emailMessageDTO : messageDTOS) {
             MessageResponse response = new MessageResponse();
             response.setId(""+emailMessageDTO.getTimestamp());
             response.setMailLocation(mailbox);
@@ -98,7 +100,7 @@ public class EMailAdapter {
         return messagePayload;
     }
 
-    private RecipientDetail getRecipientDetails(EmailMessageDTO emailMessageDTO) {
+    private RecipientDetail getRecipientDetails(MailMessageDTO emailMessageDTO) {
         RecipientDetail recipientDetail = new RecipientDetail();
         recipientDetail.setRecipientTo(getEmailAddress(emailMessageDTO.getToIds()));
         recipientDetail.setRecipientCc(getEmailAddress(emailMessageDTO.getCcIds()));
@@ -122,8 +124,8 @@ public class EMailAdapter {
         return emailAddresses;
     }
 
-    private EmailMessageDTO getEmailMessage(MessageRequest msgRequest) {
-        EmailMessageDTO emailMessageDTO = new EmailMessageDTO();
+    private MailMessageDTO getMailMessage(MessageRequest msgRequest) {
+        MailMessageDTO emailMessageDTO = new MailMessageDTO();
         emailMessageDTO.setMailId(msgRequest.getMessageFrom().getId());
         emailMessageDTO.setToIds(getEmailIds(msgRequest.getMessageRecipient().getRecipientTo()));
         emailMessageDTO.setCcIds(getEmailIds(msgRequest.getMessageRecipient().getRecipientCc()));
@@ -168,7 +170,7 @@ public class EMailAdapter {
      * @throws ProcessingFailureException
      */
     public MessageResponse saveDraft(MessageRequest msgRequest) throws ProcessingFailureException {
-        EmailMessageDTO emailMessageDTO = getEmailMessage(msgRequest);
+        MailMessageDTO emailMessageDTO = getMailMessage(msgRequest);
         MessageResponse messageResponse = new MessageResponse();
         if (saveMessageAsDraft(emailMessageDTO)) {
             messageResponse.setId("" + emailMessageDTO.getTimestamp());
@@ -178,11 +180,11 @@ public class EMailAdapter {
         return messageResponse;
     }
 
-    public boolean saveMessageAsDraft(EmailMessageDTO emailMessageDTO) {
+    public boolean saveMessageAsDraft(MailMessageDTO mailMessageDTO) {
         boolean isSaved = true;
 
         // Put mail reference in DRAFT of the sender mailBox
-        Map<String, Map<String, List<EmailMessageDTO>>> messages = serviceSenderMailBox(emailMessageDTO,MAILBOX_DRAFT);
+        Map<String, Map<String, List<MailMessageDTO>>> messages = serviceSenderMailBox(mailMessageDTO,MAILBOX_DRAFT);
 
         EmailUtil.prettyDisplayMailbox(messages);
         // Check if the usr has mails already. If so add to the list else create a new entry.
@@ -194,14 +196,14 @@ public class EMailAdapter {
          * @param emailMessageDTO
          * @return boolean
          */
-    public boolean saveMessage(EmailMessageDTO emailMessageDTO) {
+    public boolean saveMessage(MailMessageDTO emailMessageDTO) {
         boolean isSaved = false;
 
         // Combine to, cc and bcc
         List<String> recipientList = getRecipientList(emailMessageDTO);
 
         // Put mail reference in SENT of the sender mailBox
-        Map<String, Map<String, List<EmailMessageDTO>>> messages = serviceSenderMailBox(emailMessageDTO, MAILBOX_SENT);
+        Map<String, Map<String, List<MailMessageDTO>>> messages = serviceSenderMailBox(emailMessageDTO, MAILBOX_SENT);
 
         // Put mail reference in INBOX of the receiver mailBox
         isSaved = serviceReceiverMailBox(messages, emailMessageDTO, recipientList, isSaved);
@@ -211,27 +213,27 @@ public class EMailAdapter {
         return isSaved;
     }
 
-    private static boolean serviceReceiverMailBox(Map<String, Map<String, List<EmailMessageDTO>>> messages,
-                                                  EmailMessageDTO emailMessageDTO, List<String> recipientList,
+    private static boolean serviceReceiverMailBox(Map<String, Map<String, List<MailMessageDTO>>> messages,
+                                                  MailMessageDTO emailMessageDTO, List<String> recipientList,
                                                   boolean isSaved) {
         // Setting in recipient MailBox
         for (String recipients : recipientList) {
             if (messages.containsKey(recipients)) {
-                Map<String, List<EmailMessageDTO>> emailDtos = messages.get(recipients);
+                Map<String, List<MailMessageDTO>> emailDtos = messages.get(recipients);
                 if (emailDtos.containsKey(MAILBOX_INBOX)) {
-                    List<EmailMessageDTO> mails = emailDtos.get(MAILBOX_INBOX);
+                    List<MailMessageDTO> mails = emailDtos.get(MAILBOX_INBOX);
                     mails.add(emailMessageDTO);
                     emailDtos.put(MAILBOX_INBOX, mails);
                 } else {
-                    List<EmailMessageDTO> mails = new ArrayList<>();
+                    List<MailMessageDTO> mails = new ArrayList<>();
                     mails.add(emailMessageDTO);
                     emailDtos.put(MAILBOX_INBOX, mails);
                 }
                 messages.put(recipients, emailDtos);
                 isSaved = true;
             } else {
-                Map<String, List<EmailMessageDTO>> emailDtos = new HashMap<>();
-                List<EmailMessageDTO> emailMessageDTOS = new ArrayList<>();
+                Map<String, List<MailMessageDTO>> emailDtos = new HashMap<>();
+                List<MailMessageDTO> emailMessageDTOS = new ArrayList<>();
                 emailMessageDTOS.add(emailMessageDTO);
                 emailDtos.put(MAILBOX_INBOX, emailMessageDTOS);
                 messages.put(recipients, emailDtos);
@@ -241,35 +243,35 @@ public class EMailAdapter {
         return isSaved;
     }
 
-    private Map<String, Map<String, List<EmailMessageDTO>>> serviceSenderMailBox(EmailMessageDTO emailMessageDTO,
+    private Map<String, Map<String, List<MailMessageDTO>>> serviceSenderMailBox(MailMessageDTO mailMessageDTO,
                                                                                  String mailBoxLocation) {
         // Putting it in Sender MailBox
-        Map<String, Map<String, List<EmailMessageDTO>>> messages = emailBoxRepository.getMessages();
+        Map<String, Map<String, List<MailMessageDTO>>> messages = mailBoxRepository.getMessages();
 
         // Check if the user has previous messages if yes add to existing else create new
-        if (messages.containsKey(emailMessageDTO.getMailId())) {
-            Map<String, List<EmailMessageDTO>> mailBox = messages.get(emailMessageDTO.getMailId());
+        if (messages.containsKey(mailMessageDTO.getMailId())) {
+            Map<String, List<MailMessageDTO>> mailBox = messages.get(mailMessageDTO.getMailId());
             if (mailBox.containsKey(mailBoxLocation)) {
-                List<EmailMessageDTO> emailDtos = mailBox.get(mailBoxLocation);
-                emailDtos.add(emailMessageDTO);
+                List<MailMessageDTO> emailDtos = mailBox.get(mailBoxLocation);
+                emailDtos.add(mailMessageDTO);
                 mailBox.put(mailBoxLocation, emailDtos);
             } else {
-                List<EmailMessageDTO> emailDtos = new ArrayList<>();
-                emailDtos.add(emailMessageDTO);
+                List<MailMessageDTO> emailDtos = new ArrayList<>();
+                emailDtos.add(mailMessageDTO);
                 mailBox.put(mailBoxLocation, emailDtos);
             }
         } else {
-            Map<String, List<EmailMessageDTO>> mailBox = new HashMap<>();
-            List<EmailMessageDTO> emailDtos = new ArrayList<>();
-            emailDtos.add(emailMessageDTO);
+            Map<String, List<MailMessageDTO>> mailBox = new HashMap<>();
+            List<MailMessageDTO> emailDtos = new ArrayList<>();
+            emailDtos.add(mailMessageDTO);
             mailBox.put(mailBoxLocation, emailDtos);
-            messages.put(emailMessageDTO.getMailId(), mailBox);
+            messages.put(mailMessageDTO.getMailId(), mailBox);
         }
         return messages;
     }
 
     // Combine to,cc,bcc Mail addresses
-    private static List<String> getRecipientList(EmailMessageDTO emailMessageDTO) {
+    private static List<String> getRecipientList(MailMessageDTO emailMessageDTO) {
         List<String> toIds = emailMessageDTO.getToIds();
         List<String> ccIds = emailMessageDTO.getCcIds();
         List<String> bccIds = emailMessageDTO.getBccIds();

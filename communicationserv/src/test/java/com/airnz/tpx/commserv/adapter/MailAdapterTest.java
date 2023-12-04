@@ -1,6 +1,6 @@
 package com.airnz.tpx.commserv.adapter;
 
-import com.airnz.tpx.commserv.data.EmailRepository;
+import com.airnz.tpx.commserv.data.MailRepository;
 import com.airnz.tpx.commserv.pojo.EmailSearchCriteria;
 import com.airnz.tpx.commserv.testutils.TestUtil;
 import generated.MessageRequest;
@@ -14,12 +14,12 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class EMailAdapterTest {
+public class MailAdapterTest {
 
     @Mock
-    EmailRepository emailBoxRepository;
+    MailRepository emailBoxRepository;
     @InjectMocks
-    EMailAdapter mailAdapter;
+    MailAdapter mailAdapter;
 
     @BeforeMethod
     public void setup() {

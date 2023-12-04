@@ -1,6 +1,6 @@
 package com.airnz.tpx.commserv.service.email;
 
-import com.airnz.tpx.commserv.adapter.EMailAdapter;
+import com.airnz.tpx.commserv.adapter.MailAdapter;
 import com.airnz.tpx.commserv.exception.ProcessingFailureException;
 import com.airnz.tpx.commserv.exception.RequestValidationException;
 import com.airnz.tpx.commserv.pojo.EmailSearchCriteria;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 public class FetchEmailService extends AbstractCommunicationService<EmailSearchCriteria, MessageSearchResponse> {
 
     @Autowired
-    private EMailAdapter mailAdapter;
+    private MailAdapter mailAdapter;
 
     @Override
     protected void validateRequest(EmailSearchCriteria request) throws RequestValidationException {

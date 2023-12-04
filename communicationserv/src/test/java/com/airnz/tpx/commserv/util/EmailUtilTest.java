@@ -1,7 +1,7 @@
 package com.airnz.tpx.commserv.util;
 
-import com.airnz.tpx.commserv.pojo.EmailMessageDTO;
 import com.airnz.tpx.commserv.pojo.EmailSearchCriteria;
+import com.airnz.tpx.commserv.pojo.MailMessageDTO;
 import generated.MessageResponse;
 import generated.MessageSearchResponse;
 import org.junit.jupiter.api.Test;
@@ -38,8 +38,8 @@ class EmailUtilTest {
 
     @Test
     void testPrettyDisplayMailboxWithMap() {
-        Map<String, Map<String, List<EmailMessageDTO>>> mailboxMap = new HashMap<>();
-        mailboxMap.put("owner1", Collections.singletonMap("inbox", Collections.singletonList(new EmailMessageDTO())));
+        Map<String, Map<String, List<MailMessageDTO>>> mailboxMap = new HashMap<>();
+        mailboxMap.put("owner1", Collections.singletonMap("inbox", Collections.singletonList(new MailMessageDTO())));
 
         assertDoesNotThrow(() -> EmailUtil.prettyDisplayMailbox(mailboxMap));
         // You can add more assertions based on your specific expectations

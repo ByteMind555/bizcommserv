@@ -1,6 +1,6 @@
 package com.airnz.tpx.commserv.service.email;
 
-import com.airnz.tpx.commserv.adapter.EMailAdapter;
+import com.airnz.tpx.commserv.adapter.MailAdapter;
 import com.airnz.tpx.commserv.exception.ProcessingFailureException;
 import com.airnz.tpx.commserv.exception.RequestValidationException;
 import com.airnz.tpx.commserv.service.AbstractCommunicationService;
@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 public class PublishEmailService extends AbstractCommunicationService<MessageRequest, MessageResponse> {
 
     @Autowired
-    private EMailAdapter mailAdapter;
+    private MailAdapter mailAdapter;
 
     @Override
     protected void validateRequest(MessageRequest request) throws RequestValidationException {
