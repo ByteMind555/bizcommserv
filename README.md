@@ -11,6 +11,8 @@ Welcome aboard Air New Zealand's groundbreaking Technology Platform eXperience (
 3. For our MVP, will be going with in-memory Java collections for storing mails, Hence no databases and mailboxes ! It's a demo that's as dynamic as it gets!
 4. The FT verification was manually done with Postman. The following is the postman collection used invoking the service.
    https://github.com/ByteMind555/bizcommserv/blob/main/communicationserv/src/test/java/resource/AirNZ_Email_Collection.postman_collection.json
+   FT Code:
+   https://github.com/ByteMind555/bizcommserv/tree/main/communicationservfunctionaltest/src/test/java/com/airnz/tpx/communicationserv/ft
 5. For the automation of the deployment I am new to AWS and hence have started to understand CodeDeploy [at](https://aws.amazon.com/codedeploy/ )  
        
 ## Design Considerations
@@ -113,6 +115,6 @@ So that is visible the attched logs
 2. Though Search API(GET http://localhost:8080/v1/mails/) supports pagination, sorting results and other features, they are not implemented for the demo. 
 3. The REST POST supports 'async' header. This is used to do long running opertaion. The request takes a boolen value heaader. Not implemented for this demo. Need to expose a getStatus API to get the status.
 4. Performance test was not carried out for the solution.
-5. Verification was done locally by running in a local tomcat and Postman for invoking the request.
+5. Verification was done locally by running in a local tomcat and Postman for invoking the request. FT location https://github.com/ByteMind555/bizcommserv/tree/main/communicationservfunctionaltest/src/test/java/com/airnz/tpx/communicationserv/ft
 
 Get ready to embark on a communication revolution within Air New Zealand! Please reachout to me Diwakar <diwakar.david@gmail.com>
